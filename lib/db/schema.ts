@@ -9,12 +9,18 @@ import {
   primaryKey,
   foreignKey,
   boolean,
+  integer,
 } from 'drizzle-orm/pg-core';
 
 export const user = pgTable('User', {
   id: uuid('id').primaryKey().notNull().defaultRandom(),
   email: varchar('email', { length: 64 }).notNull(),
   password: varchar('password', { length: 64 }),
+  role: varchar('role', { enum: ['user', 'admin', 'super_admin'] })
+    .notNull()
+    .default('user'),
+  createdAt: timestamp('createdAt').notNull().defaultNow(),
+  updatedAt: timestamp('updatedAt').notNull().defaultNow(),
 });
 
 export type User = InferSelectModel<typeof user>;
@@ -168,3 +174,19 @@ export const stream = pgTable(
 );
 
 export type Stream = InferSelectModel<typeof stream>;
+
+export const suggestedPrompt = pgTable('SuggestedPrompt', {
+  id: uuid('id').primaryKey().notNull().defaultRandom(),
+  title: varchar('title', { length: 100 }).notNull(),
+  prompt: text('prompt').notNull(),
+  category: varchar('category', { length: 50 }),
+  order: integer('order').notNull().default(0),
+  isActive: boolean('isActive').notNull().default(true),
+  createdBy: uuid('createdBy')
+    .notNull()
+    .references(() => user.id),
+  createdAt: timestamp('createdAt').notNull().defaultNow(),
+  updatedAt: timestamp('updatedAt').notNull().defaultNow(),
+});
+
+export type SuggestedPrompt = InferSelectModel<typeof suggestedPrompt>;

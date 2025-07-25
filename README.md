@@ -231,11 +231,58 @@ After starting the app:
 
 Access the admin panel at `/admin` (requires admin or super_admin role).
 
+### Screenshots
+
+<div align="center">
+  <table>
+    <tr>
+      <td align="center">
+        <img src="docs/images/admin-dashboard.png" alt="Admin Dashboard" width="100%"/>
+        <br/>
+        <strong>Dashboard</strong>
+        <br/>
+        <em>View system statistics and metrics at a glance</em>
+      </td>
+      <td align="center">
+        <img src="docs/images/admin-prompts.png" alt="Suggested Prompts Management" width="100%"/>
+        <br/>
+        <strong>Suggested Prompts</strong>
+        <br/>
+        <em>Create and manage prompts for users</em>
+      </td>
+    </tr>
+    <tr>
+      <td align="center" colspan="2">
+        <img src="docs/images/admin-users.png" alt="User Management" width="50%"/>
+        <br/>
+        <strong>User Management</strong>
+        <br/>
+        <em>View and manage user roles (super admin only)</em>
+      </td>
+    </tr>
+  </table>
+</div>
+
 ### Features
 
-1. **Dashboard** - System statistics and quick actions
-2. **User Management** - View users and assign roles (super admin only)
-3. **Suggested Prompts** - Create, edit, and organize prompts
+1. **Dashboard** 
+   - Real-time user statistics (total users, active users)
+   - Chat metrics (total chats, messages sent)
+   - Active prompts counter
+   - Visual analytics with interactive charts
+
+2. **User Management** (Super Admin Only)
+   - View all registered users
+   - Assign and modify user roles
+   - Filter and paginate through user lists
+   - See user creation dates and current roles
+
+3. **Suggested Prompts** 
+   - Create, edit, and delete prompts
+   - Toggle prompts active/inactive
+   - Drag-and-drop reordering
+   - Real-time preview of prompt content
+   - Maximum of 4 active prompts shown in chat interface
 
 ### Managing Suggested Prompts
 

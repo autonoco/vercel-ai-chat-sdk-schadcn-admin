@@ -96,7 +96,7 @@ jobs:
           # pnpm test:smoke
 
       - name: Notify team
-        if: always()
+        if: always() && secrets.SLACK_WEBHOOK_URL != ''
         uses: 8398a7/action-slack@v3
         with:
           status: ${{ job.status }}
@@ -106,9 +106,8 @@ jobs:
             Commit: ${{ github.sha }}
             URL: ${{ env.DEPLOYMENT_URL }}
             Actor: ${{ github.actor }}
-          webhook_url: ${{ secrets.SLACK_WEBHOOK }}
         env:
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
       - name: Rollback on failure
         if: failure()

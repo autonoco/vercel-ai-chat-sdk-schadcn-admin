@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { Button } from './ui/button';
-import { memo } from 'react';
+import { memo, useState, useEffect } from 'react';
 import type { UseChatHelpers } from '@ai-sdk/react';
 import type { VisibilityType } from './visibility-selector';
 import type { ChatMessage } from '@/lib/types';
@@ -18,7 +18,7 @@ function PureSuggestedActions({
   sendMessage,
   selectedVisibilityType,
 }: SuggestedActionsProps) {
-  const suggestedActions = [
+  const [suggestedActions, setSuggestedActions] = useState([
     {
       title: 'What are the advantages',
       label: 'of using Next.js?',
@@ -39,7 +39,26 @@ function PureSuggestedActions({
       label: 'in San Francisco?',
       action: 'What is the weather in San Francisco?',
     },
-  ];
+  ]);
+
+  useEffect(() => {
+    // Fetch active suggested prompts from the API
+    fetch('/api/prompts/suggested')
+      .then(response => response.json())
+      .then(prompts => {
+        if (prompts && prompts.length > 0) {
+          const actions = prompts.slice(0, 4).map((prompt: any) => ({
+            title: prompt.title,
+            label: prompt.prompt.replace(prompt.title, '').trim(),
+            action: prompt.prompt,
+          }));
+          setSuggestedActions(actions);
+        }
+      })
+      .catch(error => {
+        console.error('Failed to fetch suggested prompts:', error);
+      });
+  }, []);
 
   return (
     <div

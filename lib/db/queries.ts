@@ -38,8 +38,9 @@ import { ChatSDKError } from '../errors';
 // use the Drizzle adapter for Auth.js / NextAuth
 // https://authjs.dev/reference/adapter/drizzle
 
-// biome-ignore lint: Forbidden non-null assertion.
-const client = postgres(process.env.POSTGRES_URL!);
+import { getDatabaseUrl } from '@/config/environments';
+
+const client = postgres(getDatabaseUrl());
 const db = drizzle(client);
 
 export async function getUser(email: string): Promise<Array<User>> {

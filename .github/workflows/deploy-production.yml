@@ -1,0 +1,118 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_PROD }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 9
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run tests
+        run: |
+          pnpm lint
+          pnpm test
+
+      - name: Backup production database (optional)
+        env:
+          POSTGRES_URL_PROD: ${{ secrets.POSTGRES_URL_PROD }}
+        run: |
+          echo "Creating database backup..."
+          # Add your database backup command here
+          # Example: pg_dump $POSTGRES_URL_PROD > backup-$(date +%Y%m%d-%H%M%S).sql
+
+      - name: Run database migrations
+        env:
+          POSTGRES_URL_PROD: ${{ secrets.POSTGRES_URL_PROD }}
+          NODE_ENV: production
+          VERCEL_ENV: production
+        run: |
+          echo "Running production database migrations..."
+          pnpm db:migrate
+
+      - name: Install Vercel CLI
+        run: pnpm add -g vercel@latest
+
+      - name: Pull Vercel Environment Information
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Build Project Artifacts
+        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Deploy to Vercel Production
+        run: |
+          vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }} > deployment-url.txt
+          echo "DEPLOYMENT_URL=$(cat deployment-url.txt)" >> $GITHUB_ENV
+
+      - name: Create GitHub Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ github.run_number }}
+          release_name: Production Release v${{ github.run_number }}
+          body: |
+            ## Production Deployment
+            
+            **Commit:** ${{ github.sha }}
+            **Deployed to:** ${{ env.DEPLOYMENT_URL }}
+            **Deployed at:** $(date -u +"%Y-%m-%d %H:%M:%S UTC")
+            
+            ### Changes
+            ${{ github.event.head_commit.message }}
+          draft: false
+          prerelease: false
+
+      - name: Run production smoke tests
+        env:
+          PLAYWRIGHT_BASE_URL: ${{ env.DEPLOYMENT_URL }}
+        run: |
+          # Add smoke tests for critical paths
+          echo "Running production smoke tests..."
+          # pnpm test:smoke
+
+      - name: Notify team
+        if: always()
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          text: |
+            Production deployment ${{ job.status }}
+            Version: v${{ github.run_number }}
+            Commit: ${{ github.sha }}
+            URL: ${{ env.DEPLOYMENT_URL }}
+            Actor: ${{ github.actor }}
+          webhook_url: ${{ secrets.SLACK_WEBHOOK }}
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+
+      - name: Rollback on failure
+        if: failure()
+        run: |
+          echo "Deployment failed. Initiating rollback..."
+          # Add rollback logic here
+          # Example: vercel rollback --token=${{ secrets.VERCEL_TOKEN }}

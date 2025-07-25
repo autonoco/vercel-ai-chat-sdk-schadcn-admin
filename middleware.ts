@@ -37,6 +37,19 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/', request.url));
   }
 
+  // Admin route protection
+  if (pathname.startsWith('/admin')) {
+    // Check if user has admin or super_admin role
+    if (!token || !['admin', 'super_admin'].includes(token.role)) {
+      return NextResponse.redirect(new URL('/', request.url));
+    }
+    
+    // Check if user is trying to access user management (super_admin only)
+    if (pathname.startsWith('/admin/users') && token.role !== 'super_admin') {
+      return NextResponse.redirect(new URL('/admin', request.url));
+    }
+  }
+
   return NextResponse.next();
 }
 
@@ -47,6 +60,7 @@ export const config = {
     '/api/:path*',
     '/login',
     '/register',
+    '/admin/:path*',
 
     /*
      * Match all request paths except for the ones starting with:

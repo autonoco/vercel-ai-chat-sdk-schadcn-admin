@@ -106,6 +106,34 @@ cp .env.production.example .env.production
 
 ### 2. Configure Environment Variables
 
+#### Environment Variable Strategy
+
+This project supports two approaches for environment variables:
+
+**1. Vercel Dashboard (Recommended)**
+
+Use Vercel's built-in environment variable system. Set different values for the same variable name across environments:
+
+- **Development**: Local development using `.env.local`
+- **Preview**: Staging/preview deployments on Vercel
+- **Production**: Production deployments on Vercel
+
+In your Vercel dashboard, set these variables for each environment:
+- `POSTGRES_URL` - Different database for each environment
+- `REDIS_URL` - Different Redis instance (optional - only for resumable streams)
+- `BLOB_READ_WRITE_TOKEN` - Different blob storage
+- `AUTH_SECRET` - Different secret for each environment
+- `XAI_API_KEY` - Can be the same across environments
+
+**2. GitHub Actions & Manual Scripts**
+
+For workflows that need to specify environments explicitly (like database migrations in CI/CD), you can use environment-specific names:
+- `POSTGRES_URL_STAGING` / `POSTGRES_URL_PROD`
+- `REDIS_URL_STAGING` / `REDIS_URL_PROD`
+- `BLOB_READ_WRITE_TOKEN_STAGING` / `BLOB_READ_WRITE_TOKEN_PROD`
+
+The configuration will check for environment-specific names first, then fall back to standard names.
+
 Update `.env.local` with your development credentials:
 
 ```env
@@ -261,13 +289,26 @@ NODE_ENV=production VERCEL_ENV=preview pnpm db:migrate
 ```
 
 #### Production
-```bash
-# Promote from staging
-pnpm db:promote
 
-# Or apply directly
+For production database updates, you have two options:
+
+**Option 1: Manual Promotion from Staging**
+```bash
+# The promote script requires both database URLs to be set locally
+# Add these to your .env.local (DO NOT commit):
+# POSTGRES_URL_STAGING=your-staging-db-url
+# POSTGRES_URL_PROD=your-production-db-url
+
+pnpm db:promote
+```
+
+**Option 2: Direct Migration**
+```bash
+# Apply migrations directly in production
 NODE_ENV=production VERCEL_ENV=production pnpm db:migrate
 ```
+
+> Note: The promote-to-production script needs access to both staging and production databases simultaneously, so it requires separate environment variable names.
 
 ## Customization
 

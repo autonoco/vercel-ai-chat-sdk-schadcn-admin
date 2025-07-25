@@ -14,11 +14,16 @@ config({ path: '.env.local' });
 async function main() {
   console.log('🚀 Database Promotion Script');
   console.log('============================\n');
+  console.log('⚠️  Note: This script requires both staging and production database URLs');
+  console.log('Since Vercel uses environment-specific variables, you need to set both:');
+  console.log('- POSTGRES_URL_STAGING: Your staging database URL');
+  console.log('- POSTGRES_URL_PROD: Your production database URL');
+  console.log('in your .env.local file when running this script locally.\n');
 
   // Check if we have the necessary environment variables
   if (!process.env.POSTGRES_URL_STAGING || !process.env.POSTGRES_URL_PROD) {
     console.error('❌ Error: Missing required environment variables');
-    console.error('Please ensure POSTGRES_URL_STAGING and POSTGRES_URL_PROD are set');
+    console.error('Please ensure POSTGRES_URL_STAGING and POSTGRES_URL_PROD are set in your .env.local file');
     process.exit(1);
   }
 

@@ -20,72 +20,46 @@ export const getEnvironment = (): Environment => {
 export const getDatabaseUrl = (): string => {
   const environment = getEnvironment();
   
+  // Support both environment-specific names (for workflows) and standard names (for Vercel)
   switch (environment) {
     case 'production':
-      if (!process.env.POSTGRES_URL_PROD) {
-        throw new Error('POSTGRES_URL_PROD is not defined for production environment');
-      }
-      return process.env.POSTGRES_URL_PROD;
-      
+      return process.env.POSTGRES_URL_PROD || process.env.POSTGRES_URL || throwError('POSTGRES_URL');
     case 'staging':
-      if (!process.env.POSTGRES_URL_STAGING) {
-        throw new Error('POSTGRES_URL_STAGING is not defined for staging environment');
-      }
-      return process.env.POSTGRES_URL_STAGING;
-      
+      return process.env.POSTGRES_URL_STAGING || process.env.POSTGRES_URL || throwError('POSTGRES_URL');
     default:
-      if (!process.env.POSTGRES_URL) {
-        throw new Error('POSTGRES_URL is not defined for development environment');
-      }
-      return process.env.POSTGRES_URL;
+      return process.env.POSTGRES_URL || throwError('POSTGRES_URL');
   }
 };
+
+function throwError(varName: string): never {
+  throw new Error(`${varName} is not defined`);
+}
 
 export const getRedisUrl = (): string => {
   const environment = getEnvironment();
   
+  // Support both environment-specific names (for workflows) and standard names (for Vercel)
   switch (environment) {
     case 'production':
-      if (!process.env.REDIS_URL_PROD) {
-        throw new Error('REDIS_URL_PROD is not defined for production environment');
-      }
-      return process.env.REDIS_URL_PROD;
-      
+      return process.env.REDIS_URL_PROD || process.env.REDIS_URL || throwError('REDIS_URL');
     case 'staging':
-      if (!process.env.REDIS_URL_STAGING) {
-        throw new Error('REDIS_URL_STAGING is not defined for staging environment');
-      }
-      return process.env.REDIS_URL_STAGING;
-      
+      return process.env.REDIS_URL_STAGING || process.env.REDIS_URL || throwError('REDIS_URL');
     default:
-      if (!process.env.REDIS_URL) {
-        throw new Error('REDIS_URL is not defined for development environment');
-      }
-      return process.env.REDIS_URL;
+      return process.env.REDIS_URL || throwError('REDIS_URL');
   }
 };
 
 export const getBlobToken = (): string => {
   const environment = getEnvironment();
   
+  // Support both environment-specific names (for workflows) and standard names (for Vercel)
   switch (environment) {
     case 'production':
-      if (!process.env.BLOB_READ_WRITE_TOKEN_PROD) {
-        throw new Error('BLOB_READ_WRITE_TOKEN_PROD is not defined for production environment');
-      }
-      return process.env.BLOB_READ_WRITE_TOKEN_PROD;
-      
+      return process.env.BLOB_READ_WRITE_TOKEN_PROD || process.env.BLOB_READ_WRITE_TOKEN || throwError('BLOB_READ_WRITE_TOKEN');
     case 'staging':
-      if (!process.env.BLOB_READ_WRITE_TOKEN_STAGING) {
-        throw new Error('BLOB_READ_WRITE_TOKEN_STAGING is not defined for staging environment');
-      }
-      return process.env.BLOB_READ_WRITE_TOKEN_STAGING;
-      
+      return process.env.BLOB_READ_WRITE_TOKEN_STAGING || process.env.BLOB_READ_WRITE_TOKEN || throwError('BLOB_READ_WRITE_TOKEN');
     default:
-      if (!process.env.BLOB_READ_WRITE_TOKEN) {
-        throw new Error('BLOB_READ_WRITE_TOKEN is not defined for development environment');
-      }
-      return process.env.BLOB_READ_WRITE_TOKEN;
+      return process.env.BLOB_READ_WRITE_TOKEN || throwError('BLOB_READ_WRITE_TOKEN');
   }
 };
 

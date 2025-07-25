@@ -237,14 +237,14 @@ Access the admin panel at `/admin` (requires admin or super_admin role).
   <table>
     <tr>
       <td align="center">
-        <img src="public/images/images/admin-dashboard.png" alt="Admin Dashboard" width="100%"/>
+        <img src="app/(admin)/admin-dashboard.png" alt="Admin Dashboard" width="100%"/>
         <br/>
         <strong>Dashboard</strong>
         <br/>
         <em>View system statistics and metrics at a glance</em>
       </td>
       <td align="center">
-        <img src="public/images/admin-prompts.png" alt="Suggested Prompts Management" width="100%"/>
+        <img src="app/(admin)/admin-prompts.png" alt="Suggested Prompts Management" width="100%"/>
         <br/>
         <strong>Suggested Prompts</strong>
         <br/>
@@ -253,7 +253,7 @@ Access the admin panel at `/admin` (requires admin or super_admin role).
     </tr>
     <tr>
       <td align="center" colspan="2">
-        <img src="public/images/admin-users.png" alt="User Management" width="50%"/>
+        <img src="app/(admin)/admin-users.png" alt="User Management" width="50%"/>
         <br/>
         <strong>User Management</strong>
         <br/>

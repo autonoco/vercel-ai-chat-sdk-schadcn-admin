@@ -22,6 +22,10 @@ async function seed() {
     const email = process.env.SUPER_ADMIN_EMAIL;
     const password = process.env.SUPER_ADMIN_PASSWORD;
 
+    if (!email || !password) {
+      throw new Error('SUPER_ADMIN_EMAIL and SUPER_ADMIN_PASSWORD environment variables are required');
+    }
+
     const hashedPassword = generateHashedPassword(password);
 
     const [existingAdmin] = await db

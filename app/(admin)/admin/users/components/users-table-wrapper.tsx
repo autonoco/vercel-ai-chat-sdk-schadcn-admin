@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { DataTable } from '@/components/data-table';
-import { userColumns, UserData } from './users-data-table';
+import { userColumns, type UserData } from './users-data-table';
 
 interface UsersTableWrapperProps {
   data: UserData[];

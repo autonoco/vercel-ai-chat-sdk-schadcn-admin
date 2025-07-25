@@ -1,7 +1,7 @@
 'use client';
 
 import { z } from 'zod';
-import { ColumnDef } from '@tanstack/react-table';
+import type { ColumnDef } from '@tanstack/react-table';
 import { UserActions } from './user-actions';
 import { TableCellViewer } from '@/components/data-table';
 

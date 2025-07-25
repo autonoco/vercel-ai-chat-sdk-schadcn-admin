@@ -27,6 +27,6 @@ export async function POST(request: Request) {
     return Response.json({ prompt: newPrompt }, { status: 201 });
   } catch (error) {
     console.error('Error creating prompt:', error);
-    return new ChatSDKError('internal:api', 'Failed to create prompt').toResponse();
+    return new ChatSDKError('bad_request:api', 'Failed to create prompt').toResponse();
   }
 }

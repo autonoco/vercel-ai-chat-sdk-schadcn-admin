@@ -2,30 +2,25 @@
 
 import * as React from "react"
 import {
-  DndContext,
   KeyboardSensor,
   MouseSensor,
   TouchSensor,
-  closestCenter,
   useSensor,
   useSensors,
   type DragEndEvent,
   type UniqueIdentifier,
 } from "@dnd-kit/core"
-import { restrictToVerticalAxis } from "@dnd-kit/modifiers"
 import {
-  SortableContext,
   arrayMove,
   useSortable,
-  verticalListSortingStrategy,
 } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
 import {
-  ColumnDef,
-  ColumnFiltersState,
-  Row,
-  SortingState,
-  VisibilityState,
+  type ColumnDef,
+  type ColumnFiltersState,
+  type Row,
+  type SortingState,
+  type VisibilityState,
   flexRender,
   getCoreRowModel,
   getFacetedRowModel,
@@ -36,40 +31,29 @@ import {
   useReactTable,
 } from "@tanstack/react-table"
 import {
-  CheckCircle2Icon,
-  CheckCircleIcon,
-  ChevronDownIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
   ChevronsLeftIcon,
   ChevronsRightIcon,
-  ColumnsIcon,
   GripVerticalIcon,
-  LoaderIcon,
   MoreVerticalIcon,
-  PlusIcon,
   TrendingUpIcon,
 } from "lucide-react"
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts"
-import { toast } from "sonner"
 import { z } from "zod"
 
 import { useIsMobile } from "@/hooks/use-mobile"
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
-  ChartConfig,
+  type ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart"
-import { Checkbox } from "@/components/ui/checkbox"
 import {
   DropdownMenu,
-  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
@@ -100,12 +84,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs"
 
 export const schema = z.object({
   id: z.number(),
@@ -212,7 +190,9 @@ function DraggableRow({ row }: { row: Row<z.infer<typeof schema>> }) {
   )
 }
 
-export function DataTable<TData extends z.infer<typeof schema>>({
+type TableData = z.infer<typeof schema>
+
+export function DataTable<TData extends TableData = TableData>({
   data: initialData,
   columns: customColumns,
   totalCount,
@@ -270,7 +250,7 @@ export function DataTable<TData extends z.infer<typeof schema>>({
 
   const table = useReactTable({
     data,
-    columns: customColumns || columns,
+    columns: customColumns || (columns as ColumnDef<TData>[]),
     state: {
       sorting,
       columnVisibility,

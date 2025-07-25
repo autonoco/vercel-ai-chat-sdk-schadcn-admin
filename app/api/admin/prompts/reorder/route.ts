@@ -21,6 +21,6 @@ export async function POST(request: Request) {
     return Response.json({ success: true }, { status: 200 });
   } catch (error) {
     console.error('Error reordering prompts:', error);
-    return new ChatSDKError('internal:api', 'Failed to reorder prompts').toResponse();
+    return new ChatSDKError('bad_request:api', 'Failed to reorder prompts').toResponse();
   }
 }

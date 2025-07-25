@@ -29,7 +29,7 @@ export async function PATCH(
     return Response.json({ prompt: updatedPrompt }, { status: 200 });
   } catch (error) {
     console.error('Error updating prompt:', error);
-    return new ChatSDKError('internal:api', 'Failed to update prompt').toResponse();
+    return new ChatSDKError('bad_request:api', 'Failed to update prompt').toResponse();
   }
 }
 
@@ -50,6 +50,6 @@ export async function DELETE(
     return Response.json({ prompt: deletedPrompt }, { status: 200 });
   } catch (error) {
     console.error('Error deleting prompt:', error);
-    return new ChatSDKError('internal:api', 'Failed to delete prompt').toResponse();
+    return new ChatSDKError('bad_request:api', 'Failed to delete prompt').toResponse();
   }
 }

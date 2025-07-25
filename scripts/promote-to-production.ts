@@ -1,10 +1,10 @@
 #!/usr/bin/env tsx
 
 import { config } from 'dotenv';
-import { exec } from 'child_process';
-import { promisify } from 'util';
-import path from 'path';
-import fs from 'fs/promises';
+import { exec } from 'node:child_process';
+import { promisify } from 'node:util';
+import path from 'node:path';
+import fs from 'node:fs/promises';
 
 const execAsync = promisify(exec);
 
@@ -52,13 +52,13 @@ async function main() {
     console.log('🔄 Applying migrations to production...');
     console.log('⚠️  This will modify the production database. Continue? (y/N)');
     
-    const readline = require('readline').createInterface({
+    const readline = require('node:readline').createInterface({
       input: process.stdin,
       output: process.stdout,
     });
 
     const answer = await new Promise<string>((resolve) => {
-      readline.question('', (answer) => {
+      readline.question('', (answer: string) => {
         readline.close();
         resolve(answer);
       });

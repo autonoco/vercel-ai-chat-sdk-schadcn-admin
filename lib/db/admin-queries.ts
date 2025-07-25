@@ -1,6 +1,6 @@
 import 'server-only';
 
-import { and, count, desc, eq, sql, not, like } from 'drizzle-orm';
+import { count, desc, eq, not, like } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 import { getDatabaseUrl } from '@/config/environments';
@@ -9,7 +9,6 @@ import {
   chat,
   message,
   suggestedPrompt,
-  type User,
   type SuggestedPrompt,
 } from './schema';
 import { ChatSDKError } from '../errors';

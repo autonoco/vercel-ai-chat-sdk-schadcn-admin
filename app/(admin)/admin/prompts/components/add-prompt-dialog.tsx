@@ -43,7 +43,7 @@ export function AddPromptDialog({ userId, prompts }: AddPromptDialogProps) {
 
   const button = (
     <Button disabled={!canAddMore}>
-      <PlusIcon className="mr-2 h-4 w-4" />
+      <PlusIcon className="mr-2 size-4" />
       Add Prompt
     </Button>
   );
@@ -55,7 +55,7 @@ export function AddPromptDialog({ userId, prompts }: AddPromptDialogProps) {
           <TooltipTrigger asChild>
             <DialogTrigger asChild>
               {!canAddMore ? (
-                <span tabIndex={0}>
+                <span >
                   {button}
                 </span>
               ) : (

@@ -30,6 +30,6 @@ export async function PATCH(request: Request) {
     return Response.json({ user: updatedUser }, { status: 200 });
   } catch (error) {
     console.error('Error updating user role:', error);
-    return new ChatSDKError('internal:api', 'Failed to update user role').toResponse();
+    return new ChatSDKError('bad_request:api', 'Failed to update user role').toResponse();
   }
 }

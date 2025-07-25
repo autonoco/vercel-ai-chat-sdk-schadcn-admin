@@ -23,9 +23,9 @@ import type { SuggestedPrompt } from '@/lib/db/schema';
 const formSchema = z.object({
   title: z.string().min(1, 'Title is required').max(100, 'Title must be less than 100 characters'),
   prompt: z.string().min(1, 'Prompt is required'),
-  category: z.string().optional(),
-  order: z.number().min(0).default(0),
-  isActive: z.boolean().default(false),
+  category: z.string(),
+  order: z.number().min(0),
+  isActive: z.boolean(),
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -46,7 +46,7 @@ export function PromptForm({ userId, prompt, onSuccess }: PromptFormProps) {
       title: prompt?.title || '',
       prompt: prompt?.prompt || '',
       category: prompt?.category || '',
-      order: prompt?.order || 0,
+      order: prompt?.order ?? 0,
       isActive: prompt?.isActive ?? false,
     },
   });
@@ -143,7 +143,7 @@ export function PromptForm({ userId, prompt, onSuccess }: PromptFormProps) {
                 <Input 
                   type="number" 
                   {...field} 
-                  onChange={(e) => field.onChange(parseInt(e.target.value, 10))}
+                  onChange={(e) => field.onChange(Number.parseInt(e.target.value, 10))}
                 />
               </FormControl>
               <FormDescription>

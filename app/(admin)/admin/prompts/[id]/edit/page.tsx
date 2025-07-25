@@ -6,7 +6,7 @@ import { PromptForm } from '../../components/prompt-form';
 export default async function EditPromptPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
   const session = await auth();
   
@@ -14,7 +14,8 @@ export default async function EditPromptPage({
     redirect('/admin');
   }
 
-  const prompt = await getSuggestedPromptById(params.id);
+  const { id } = await params;
+  const prompt = await getSuggestedPromptById(id);
   
   if (!prompt) {
     redirect('/admin/prompts');

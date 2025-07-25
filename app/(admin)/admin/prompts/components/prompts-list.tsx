@@ -135,7 +135,7 @@ function SortableRow({
                 <AlertDialogTitle>Are you sure?</AlertDialogTitle>
                 <AlertDialogDescription>
                   This action cannot be undone. This will permanently delete the
-                  prompt "{prompt.title}" from the system.
+                  prompt &quot;{prompt.title}&quot; from the system.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>

@@ -2,7 +2,6 @@ import { auth } from '@/app/(auth)/auth';
 import { getAdminStats } from '@/lib/db/admin-queries';
 import { AdminSectionCards } from '@/components/admin-section-cards';
 import { ChartAreaInteractive } from '@/components/chart-area-interactive';
-import { DataTable } from '@/components/data-table';
 
 export default async function AdminDashboard() {
   const session = await auth();
